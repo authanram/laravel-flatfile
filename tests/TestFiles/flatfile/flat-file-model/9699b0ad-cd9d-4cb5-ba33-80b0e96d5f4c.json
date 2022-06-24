@@ -1,0 +1,7 @@
+{
+    "id": "9699b0ad-cd9d-4cb5-ba33-80b0e96d5f4c",
+    "name": "foo",
+    "data": "{\"some-string\":\"data\",\"some-boolean\":true,\"and-a-float\":77.7}",
+    "created_at": "2022-06-24 05:23:31",
+    "updated_at": "2022-06-24 05:23:31"
+}

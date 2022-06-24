@@ -1,0 +1,81 @@
+{
+    "name": "authanram/laravel-flatfile",
+    "type": "package",
+    "description": "...",
+    "keywords": [
+        "authanram",
+        "flatfile"
+    ],
+    "license": "MIT",
+    "homepage": "https://authanram.com",
+    "require": {
+        "php": "^8.1.4",
+        "calebporzio/sushi": "^2.4",
+        "laravel/framework": "^9.17"
+    },
+    "require-dev": {
+        "authanram/laravel-query-monitor": "^1.0",
+        "authanram/laravel-stubs": "dev-develop",
+        "fakerphp/faker": "^1.9.1",
+        "mockery/mockery": "^1.4.4",
+        "nunomaduro/collision": "^6.1",
+        "nunomaduro/phpinsights": "^2.2",
+        "orchestra/testbench": "^7.0",
+        "pestphp/pest": "^1.21",
+        "pestphp/pest-plugin-laravel": "^1.2",
+        "pestphp/pest-plugin-mock": "^1.0",
+        "pestphp/pest-plugin-parallel": "^1.1",
+        "phpunit/phpunit": "^9.5.10",
+        "riimu/kit-phpencoder": "^2.4",
+        "roave/security-advisories": "dev-latest",
+        "spatie/laravel-ignition": "^1.0",
+        "spatie/laravel-ray": "^1.29",
+        "spatie/pest-plugin-snapshots": "^1.1",
+        "spatie/temporary-directory": "^2.1",
+        "vimeo/psalm": "^4.23"
+    },
+    "autoload": {
+        "psr-4": {
+            "Authanram\\FlatFile\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Authanram\\FlatFile\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Authanram\\FlatFile\\Providers\\FlatFileServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "coverage": "vendor/bin/pest --coverage",
+        "coverage:setup": "pecl install pcov",
+        "fix": "export PHPINSIGHTS_ENV= && vendor/bin/phpinsights --fix",
+        "insights": "export PHPINSIGHTS_ENV= && vendor/bin/phpinsights",
+        "test": "vendor/bin/pest",
+        "test:insights": "export PHPINSIGHTS_ENV=testing && vendor/bin/phpinsights analyse tests",
+        "psalm": "vendor/bin/psalm --config=psalm.xml --set-baseline=psalm-baseline.xml"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "composer/package-versions-deprecated": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": {
+        "authanram/laravel-stubs": {
+            "type": "path",
+            "url": "/Volumes/TEST/authanram-packages/laravel-stubs"
+        }
+    }
+}

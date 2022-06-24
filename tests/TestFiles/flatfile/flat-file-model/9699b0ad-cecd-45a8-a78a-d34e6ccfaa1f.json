@@ -1,0 +1,7 @@
+{
+    "id": "9699b0ad-cecd-45a8-a78a-d34e6ccfaa1f",
+    "name": "bar",
+    "data": "{\"some-string\":\"other-data\",\"some-boolean\":false,\"and-a-float\":7.77}",
+    "created_at": "2022-06-24 05:23:31",
+    "updated_at": "2022-06-24 05:23:31"
+}
