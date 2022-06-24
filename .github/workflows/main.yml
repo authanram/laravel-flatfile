@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [ 'master', 'develop' ]
+  pull_request:
+    branches: [ 'master' ]
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: [ubuntu-latest, windows-latest, macos-latest]
+        php-versions: ['8.0', '8.1']
+        dependency-version: [prefer-lowest, prefer-stable]
+
+    name: ${{ matrix.operating-system }} - PHP ${{ matrix.php-versions }} - ${{ matrix.dependency-version }}
+
+    env:
+      extensions: pcov
+      coverage: pcov
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: ${{ env.extensions }}
+          tools: composer:v2
+          coverage: ${{ env.coverage }}
+
+      - name: Setup Problem Matchers
+        run: |
+          echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Install dependencies
+        uses: nick-invision/retry@v1
+        with:
+          timeout_minutes: 5
+          max_attempts: 5
+          command: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
+
+      - name: Execute Tests
+        run: vendor/bin/pest --coverage
+
+      - name: Execute Insights
+        run: vendor/bin/phpinsights --summary
