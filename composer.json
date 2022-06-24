@@ -15,7 +15,6 @@
     },
     "require-dev": {
         "authanram/laravel-query-monitor": "^1.0",
-        "authanram/laravel-stubs": "dev-develop",
         "fakerphp/faker": "^1.9.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.1",
@@ -71,11 +70,5 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "repositories": {
-        "authanram/laravel-stubs": {
-            "type": "path",
-            "url": "/Volumes/TEST/authanram-packages/laravel-stubs"
-        }
-    }
+    "prefer-stable": true
 }
