@@ -6,3 +6,4 @@ env:
 
 providers:
   - Authanram\FlatFile\Providers\FlatFileServiceProvider
+  - Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider

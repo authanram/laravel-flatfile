@@ -3,10 +3,10 @@
 namespace Authanram\FlatFile\Tests\TestFiles;
 
 //use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Model;
 use Authanram\FlatFile\Concerns\FlatModel;
+use Eloquent;
 
-class FlatFileModel extends Model
+class FlatFileModel extends Eloquent
 {
     use FlatModel;
 //    use SoftDeletes;

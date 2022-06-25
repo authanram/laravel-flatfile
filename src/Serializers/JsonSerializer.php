@@ -8,7 +8,7 @@ final class JsonSerializer extends Serializer
 {
     public static function extension(): string
     {
-        return 'json';
+        return '.json';
     }
 
     /**

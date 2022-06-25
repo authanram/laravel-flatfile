@@ -6,6 +6,7 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Authanram\FlatFile\Contracts\FlatFileAdapterContract;
+use Illuminate\Support\Str;
 
 final class FilesystemAdapter implements FlatFileAdapterContract
 {
@@ -23,7 +24,15 @@ final class FilesystemAdapter implements FlatFileAdapterContract
 
     public function locate(Model|string $model): string
     {
-        return '';
+        $className = is_string($model) ? $model : $model::class;
+
+        $path = Str::of(class_basename($className))->kebab();
+
+        if (is_object($model)) {
+            $path->append('/'.$model->getKey());
+        }
+
+        return $this->storage->path($path->toString());
     }
 
     public function get(Model|string $model): array
@@ -35,6 +44,7 @@ final class FilesystemAdapter implements FlatFileAdapterContract
 
     public function set(Model $model): self
     {
+        dd($model::$flatFileAdapter);
         return $this;
     }
 }

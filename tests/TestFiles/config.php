@@ -1,7 +1,9 @@
 <?php
 
 use Authanram\FlatFile\Adapters\FilesystemAdapter;
+use Authanram\FlatFile\Contracts\FlatFileAdapterContract as Adapter;
 use Authanram\FlatFile\Serializers\JsonSerializer;
+use Authanram\FlatFile\Serializers\Serializer;
 use Illuminate\Database\Eloquent\Model;
 
 return [
@@ -17,7 +19,7 @@ return [
 
     'storage_adapter' => FilesystemAdapter::build([
         'driver' => 'local',
-        'root' => __DIR__ . '/flat-file-model',
+        'root' => __DIR__ . '/flatfile',
     ]),
 
     /*
@@ -42,13 +44,20 @@ return [
 
     'event_handlers' => [
 
-        'booting' => static function(Model $model) {
+        'saving' => static function(Model $model) {
+            dump(['saving' => $model]);
         },
 
         'saved' => static function(Model $model) {
+            dump(['saved' => $model]);
+        },
+
+        'deleting' => static function(Model $model) {
+            dump(['deleting' => $model]);
         },
 
         'deleted' => static function(Model $model) {
+            dump(['deleted' => $model]);
         },
 
     ],

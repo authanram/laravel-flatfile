@@ -15,6 +15,7 @@
     },
     "require-dev": {
         "authanram/laravel-query-monitor": "^1.0",
+        "barryvdh/laravel-ide-helper": "^2.12",
         "fakerphp/faker": "^1.9.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.1",
@@ -51,13 +52,21 @@
         }
     },
     "scripts": {
+        "post-autoload-dump": [
+            "vendor/bin/testbench package:discover --ansi"
+        ],
         "coverage": "vendor/bin/pest --coverage",
         "coverage:setup": "pecl install pcov",
         "fix": "export PHPINSIGHTS_ENV= && vendor/bin/phpinsights --fix",
         "insights": "export PHPINSIGHTS_ENV= && vendor/bin/phpinsights",
         "test": "vendor/bin/pest",
         "test:insights": "export PHPINSIGHTS_ENV=testing && vendor/bin/phpinsights analyse tests",
-        "psalm": "vendor/bin/psalm --config=psalm.xml --set-baseline=psalm-baseline.xml"
+        "psalm": "vendor/bin/psalm --config=psalm.xml --set-baseline=psalm-baseline.xml",
+        "ide-helpers": [
+            "vendor/bin/testbench ide-helper:generate",
+            "vendor/bin/testbench ide-helper:meta",
+            "vendor/bin/testbench ide-helper:models -N"
+        ]
     },
     "config": {
         "optimize-autoloader": true,

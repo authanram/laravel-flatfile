@@ -8,7 +8,7 @@ final class YamlSerializer extends Serializer
 {
     public static function extension(): string
     {
-        return 'yaml';
+        return '.yaml';
     }
 
     public static function decode(string $contents): array
