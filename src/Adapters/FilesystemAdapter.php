@@ -44,7 +44,8 @@ final class FilesystemAdapter implements FlatFileAdapterContract
 
     public function set(Model $model): self
     {
-        dd($model::$flatFileAdapter);
+        //dump($model::$flatFileAdapter);
+
         return $this;
     }
 }

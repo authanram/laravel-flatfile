@@ -1,8 +1,8 @@
 <?php
 
 use Authanram\FlatFile\Adapters\FilesystemAdapter;
+use Authanram\FlatFile\EventHandlers;
 use Authanram\FlatFile\Serializers\JsonSerializer;
-use Illuminate\Database\Eloquent\Model;
 
 return [
 
@@ -40,16 +40,5 @@ return [
     |
     */
 
-    'event_handlers' => [
-
-        'booting' => static function(Model $model) {
-        },
-
-        'saved' => static function(Model $model) {
-        },
-
-        'deleted' => static function(Model $model) {
-        },
-
-    ],
+    'event_handlers' => EventHandlers::class,
 ];

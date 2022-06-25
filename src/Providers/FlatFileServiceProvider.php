@@ -21,11 +21,11 @@ class FlatFileServiceProvider extends ServiceProvider
             return;
         }
 
-        $this->mergeConfigFrom(__DIR__ . '/../../config/config.php', 'flatfile-model');
+        $this->mergeConfigFrom(__DIR__ . '/../../config/config.php', 'flatfile');
 
         $this->publishes([
-            __DIR__ . '/../../config/config.php' => config_path('flatfile-model.php'),
-        ], 'flatfile-model');
+            __DIR__ . '/../../config/config.php' => config_path('flatfile.php'),
+        ], 'flatfile');
     }
 
     private function bootRunningUnitTests(): void
@@ -34,6 +34,6 @@ class FlatFileServiceProvider extends ServiceProvider
             return;
         }
 
-        $this->mergeConfigFrom(__DIR__ . '/../../tests/TestFiles/config.php', 'flatfile-model');
+        $this->mergeConfigFrom(__DIR__ . '/../../tests/TestFiles/config.php', 'flatfile');
     }
 }

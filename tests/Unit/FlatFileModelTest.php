@@ -11,9 +11,9 @@ it('saves model', function () {
 });
 
 it('deletes model', function () {
-    $model = new FlatFileModel;
+    $model = FlatFileModel::first();
 
-    $model->delete();
+    $model?->delete();
 
     expect(true)->toBeTrue();
 });

@@ -2,6 +2,7 @@
 
 namespace Authanram\FlatFile;
 
+use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 use Authanram\FlatFile\Contracts\FlatFileAdapterContract as AdapterContract;
 use Authanram\FlatFile\Contracts\FlatFileContract;
@@ -25,7 +26,7 @@ final class FlatFile implements FlatFileContract
             return $this->adapter;
         }
 
-        $subject = config('flatfile-model.storage_adapter');
+        $subject = config('flatfile.storage_adapter');
 
         throw_if(
             is_subclass_of($subject, AdapterContract::class) === false,
@@ -47,7 +48,7 @@ final class FlatFile implements FlatFileContract
             return $this->serializer;
         }
 
-        $subject = config('flatfile-model.serializer');
+        $subject = config('flatfile.serializer');
 
         throw_if(
             is_subclass_of($subject, Serializer::class) === false,
@@ -69,15 +70,28 @@ final class FlatFile implements FlatFileContract
             return $this->eventHandlers;
         }
 
-        $subject = config('flatfile-model.event_handlers');
+        $subject = config('flatfile.event_handlers');
 
         throw_if(
-            array_is_list($subject),
+            is_array($subject) && array_is_list($subject),
             InvalidArgumentException::class,
             'Expected map - associative array with string keys.',
         );
 
-        $this->eventHandlers = collect(config('flatfile-model.event_handlers'))
+        throw_if(
+            is_string($subject) && class_exists($subject) === false,
+            InvalidArgumentException::class,
+            "Class not found: $subject",
+        );
+
+        if (is_string($subject)) {
+            $subject = collect(get_class_methods($subject))
+                ->mapWithKeys(fn (string $method) => [
+                    $method => fn (...$args) => $subject::{$method}(...$args),
+                ])->toArray();
+        }
+
+        $this->eventHandlers = collect($subject)
             ->mapWithKeys(static function ($subject, string $key) {
                 throw_if(
                     is_callable($subject) === false,
