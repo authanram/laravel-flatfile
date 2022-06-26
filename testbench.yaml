@@ -5,5 +5,5 @@ env:
   - DB_PASSWORD=
 
 providers:
-  - Authanram\FlatFile\Providers\FlatFileServiceProvider
+  - Authanram\FlatFile\FlatFileServiceProvider
   - Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider

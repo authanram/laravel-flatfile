@@ -1,4 +1,4 @@
-<?php /** @noinspection StaticClosureCanBeUsedInspection */
+<?php /** @noinspection PhpUnhandledExceptionInspection, StaticClosureCanBeUsedInspection */
 
 use Authanram\FlatFile\Tests\TestFiles\FlatFileModel;
 use Illuminate\Database\Eloquent\Collection;
@@ -28,10 +28,7 @@ it('retrieves models', function () {
 it('saves model', function () {
     $model = FlatFileModel::create([
         'name' => 'foobar',
-        'data' => [
-            'some-data' => 'as json',
-            'some-float' => 777,
-        ],
+        'data' => ['some' => 'data'],
     ]);
 
     expect($model->exists)->toBeTrue();
@@ -45,16 +42,26 @@ it('saves model', function () {
      * @noinspection JsonEncodingApiUsageInspection
      */
     expect(File::get($path))
-        ->toEqual(json_encode($model->getAttributes(), JSON_PRETTY_PRINT));
+        ->toEqual(json_encode($model->getAttributes(), JSON_PRETTY_PRINT))
+        ->and(File::delete($path))
+        ->toBeTrue()
+        ->and(File::exists($path))
+        ->toBeFalse();
 });
 
 it('deletes model', function () {
-    $model = FlatFileModel::latest()->first();
+    $model = FlatFileModel::create([
+        'name' => 'foobar',
+    ]);
 
-    expect($model?->getKey())
+    $path = $model::flatFile()
+        ->getStorageAdapter()
+        ->locate($model);
+
+    expect($model->getKey())
         ->toEqual(4)
-        ->and($model?->delete())
+        ->and($model->delete())
         ->toBeTrue()
-        ->and(File::exists(__DIR__.'/../TestFiles/flatfile/flat-file-model/4.json'))
+        ->and(File::exists($path))
         ->toBeFalse();
 });

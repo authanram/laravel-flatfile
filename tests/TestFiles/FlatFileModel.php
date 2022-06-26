@@ -3,12 +3,11 @@
 namespace Authanram\FlatFile\Tests\TestFiles;
 
 //use Illuminate\Database\Eloquent\SoftDeletes;
-use Authanram\FlatFile\Concerns\FlatModel;
 use Eloquent;
 
 class FlatFileModel extends Eloquent
 {
-    use FlatModel;
+    use \Authanram\FlatFile\FlatFileModel;
 //    use SoftDeletes;
 
     public $timestamps = true;

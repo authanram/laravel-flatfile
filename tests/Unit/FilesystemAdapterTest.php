@@ -1,4 +1,4 @@
-<?php /** @noinspection StaticClosureCanBeUsedInspection */
+<?php /** @noinspection PhpUnhandledExceptionInspection, StaticClosureCanBeUsedInspection */
 
 use Authanram\FlatFile\Adapters\FilesystemAdapter;
 use Authanram\FlatFile\Tests\TestFiles\FlatFileModel;
@@ -40,9 +40,7 @@ it('writes to the storage', function () {
         'data' => ['some' => 'data'],
     ]);
 
-    $path = $model::flatFile()
-        ->getStorageAdapter()
-        ->locate($model);
+    $path = $model::flatFile()->getStorageAdapter()->locate($model);
 
     expect($this->filesystemAdapter->set($model))
         ->toBeTrue()

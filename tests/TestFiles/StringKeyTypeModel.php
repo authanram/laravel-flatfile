@@ -2,9 +2,7 @@
 
 namespace Authanram\FlatFile\Tests\TestFiles;
 
-use Authanram\FlatFile\Concerns\HasUuidKey;
-
-class FlatFileUuidModel extends FlatFileModel
+class StringKeyTypeModel extends FlatFileModel
 {
     use HasUuidKey;
 

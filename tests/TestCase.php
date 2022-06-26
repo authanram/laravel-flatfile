@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Authanram\FlatFile\Tests;
 
 use Authanram\FlatFile\Contracts\FlatFileAdapterContract;
-use Authanram\FlatFile\Providers\FlatFileServiceProvider;
+use Authanram\FlatFile\FlatFileServiceProvider;
 
 /**
  * @property FlatFileAdapterContract $filesystemAdapter

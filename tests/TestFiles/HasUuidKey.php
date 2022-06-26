@@ -1,6 +1,6 @@
 <?php
 
-namespace Authanram\FlatFile\Concerns;
+namespace Authanram\FlatFile\Tests\TestFiles;
 
 use Illuminate\Support\Str;
 

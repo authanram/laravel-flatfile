@@ -1,11 +1,11 @@
-<?php /** @noinspection StaticClosureCanBeUsedInspection */
+<?php /** @noinspection PhpUnhandledExceptionInspection, StaticClosureCanBeUsedInspection */
 
-use Authanram\FlatFile\Tests\TestFiles\FlatFileUuidModel;
+use Authanram\FlatFile\Tests\TestFiles\StringKeyTypeModel;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 it('supports uuid keys', function () {
-    $model = new FlatFileUuidModel();
+    $model = new StringKeyTypeModel();
 
     expect($model->incrementing)
         ->toBeFalse()
@@ -16,7 +16,7 @@ it('supports uuid keys', function () {
 });
 
 it('writes to storage', function () {
-    $model = FlatFileUuidModel::create([
+    $model = StringKeyTypeModel::create([
         'name' => 'foobar',
         'data' => ['some' => 'data'],
     ]);

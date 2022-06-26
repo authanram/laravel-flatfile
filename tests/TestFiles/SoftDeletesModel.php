@@ -4,7 +4,7 @@ namespace Authanram\FlatFile\Tests\TestFiles;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class FlatFileSoftDeletesModel extends FlatFileModel
+class SoftDeletesModel extends FlatFileModel
 {
     use SoftDeletes;
 }

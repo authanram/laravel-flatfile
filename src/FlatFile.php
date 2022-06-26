@@ -9,7 +9,7 @@ use Throwable;
 
 final class FlatFile implements FlatFileContract
 {
-    private AdapterContract $adapter;
+    private AdapterContract $storageAdapter;
 
     private array $eventHandlers;
 
@@ -18,64 +18,56 @@ final class FlatFile implements FlatFileContract
      */
     public function getStorageAdapter(): AdapterContract
     {
-        if (isset($this->adapter)) {
-            return $this->adapter;
-        }
+        return $this->storageAdapter;
+    }
 
-        $subject = config('flatfile.storage_adapter');
+    public function setStorageAdapter(AdapterContract $storageAdapter): self
+    {
+        $this->storageAdapter = $storageAdapter;
 
-        throw_if(
-            is_subclass_of($subject, AdapterContract::class) === false,
-            InvalidArgumentException::class,
-            sprintf('Expected "%s" got: %s', AdapterContract::class, gettype($subject)),
-        );
+        return $this;
+    }
 
-        $this->adapter = $subject;
-
-        return $this->adapter;
+    public function getEventHandlers(): array
+    {
+        return $this->eventHandlers;
     }
 
     /**
      * @throws Throwable
      */
-    public function getEventHandlers(): array
+    public function setEventHandlers(array|string $eventHandlers): self
     {
-        if (isset($this->eventHandlers)) {
-            return $this->eventHandlers;
-        }
-
-        $subject = config('flatfile.event_handlers');
-
         throw_if(
-            is_array($subject) && array_is_list($subject),
+            is_array($eventHandlers) && array_is_list($eventHandlers),
             InvalidArgumentException::class,
             'Expected map - associative array with string keys.',
         );
 
         throw_if(
-            is_string($subject) && class_exists($subject) === false,
+            is_string($eventHandlers) && class_exists($eventHandlers) === false,
             InvalidArgumentException::class,
-            "Class not found: $subject",
+            "Class not found: $eventHandlers",
         );
 
-        if (is_string($subject)) {
-            $subject = collect(get_class_methods($subject))
+        if (is_string($eventHandlers)) {
+            $eventHandlers = collect(get_class_methods($eventHandlers))
                 ->mapWithKeys(fn (string $method) => [
-                    $method => fn (...$args) => $subject::{$method}(...$args),
+                    $method => fn (...$args) => $eventHandlers::{$method}(...$args),
                 ])->toArray();
         }
 
-        $this->eventHandlers = collect($subject)
-            ->mapWithKeys(static function ($subject, string $key) {
+        $this->eventHandlers = collect($eventHandlers)
+            ->mapWithKeys(static function ($eventHandlers, string $key) {
                 throw_if(
-                    is_callable($subject) === false,
+                    is_callable($eventHandlers) === false,
                     InvalidArgumentException::class,
-                    sprintf('Expected a callable. Got: %s', gettype($subject)),
+                    sprintf('Expected a callable. Got: %s', gettype($eventHandlers)),
                 );
 
-                return [$key => $subject];
+                return [$key => $eventHandlers];
             })->toArray();
 
-        return $this->eventHandlers;
+        return $this;
     }
 }

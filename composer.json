@@ -47,7 +47,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Authanram\\FlatFile\\Providers\\FlatFileServiceProvider"
+                "Authanram\\FlatFile\\FlatFileServiceProvider"
             ]
         }
     },

@@ -1,19 +1,16 @@
-<?php /** @noinspection StaticClosureCanBeUsedInspection */
+<?php /** @noinspection PhpUnhandledExceptionInspection, StaticClosureCanBeUsedInspection */
 
-use Authanram\FlatFile\Contracts\FlatFileContract;
+use Authanram\FlatFile\FlatFile;
 
 beforeEach(function () {
-    $this->flatFile = resolve(FlatFileContract::class);
+    /** @noinspection PhpUnhandledExceptionInspection */
+    $this->flatFile = (new FlatFile())
+        ->setStorageAdapter(config('flatfile.storage_adapter'))
+        ->setEventHandlers(config('flatfile.event_handlers'));
 });
 
-it('throws on invalid adapter', function () {
-    config()->set('flatfile.storage_adapter', 'invalid-value');
-    $this->flatFile->getStorageAdapter();
-})->expectExceptionMessage('Expected "Authanram\FlatFile\Contracts\FlatFileAdapterContract" got: string');
-
 it('throws on invalid event handlers', function () {
-    config()->set('flatfile.event_handlers', ['array', 'list']);
-    $this->flatFile->getEventHandlers();
+    $this->flatFile->setEventHandlers(['array', 'list']);
 })->expectExceptionMessage('Expected map - associative array with string keys.');
 
 it('gets the storage adapter', function () {
