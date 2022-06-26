@@ -1,32 +1,33 @@
 <?php /** @noinspection PhpUnhandledExceptionInspection, StaticClosureCanBeUsedInspection */
 
-use Authanram\FlatFile\Tests\TestFiles\FlatFileModel;
+use Authanram\FlatFile\Tests\TestFiles\YamlSerializerModel;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\File;
+use Symfony\Component\Yaml\Yaml;
 use function Spatie\Snapshots\assertMatchesSnapshot;
 
 it('retrieves first model', function () {
-    $model = FlatFileModel::first();
+    $model = YamlSerializerModel::first();
 
-    expect($model)->toBeInstanceOf(FlatFileModel::class);
+    expect($model)->toBeInstanceOf(YamlSerializerModel::class);
 
     assertMatchesSnapshot($model?->getAttributes());
 });
 
 it('retrieves models', function () {
-    $result = FlatFileModel::all();
+    $result = YamlSerializerModel::all();
 
     expect($result)
         ->toBeInstanceOf(Collection::class)
         ->toHaveCount(3)
         ->and($result->first())
-        ->toBeInstanceOf(FlatFileModel::class);
+        ->toBeInstanceOf(YamlSerializerModel::class);
 
     assertMatchesSnapshot($result->toArray());
 });
 
 it('saves model', function () {
-    $model = FlatFileModel::create([
+    $model = YamlSerializerModel::create([
         'name' => 'some-name',
         'data' => ['some' => 'data'],
     ]);
@@ -37,12 +38,8 @@ it('saves model', function () {
         ->getStorageAdapter()
         ->locate($model);
 
-    /**
-     * @noinspection PhpUnhandledExceptionInspection
-     * @noinspection JsonEncodingApiUsageInspection
-     */
     expect(File::get($path))
-        ->toEqual(json_encode($model->getAttributes(), JSON_PRETTY_PRINT))
+        ->toEqual(Yaml::dump($model->getAttributes()))
         ->and(File::delete($path))
         ->toBeTrue()
         ->and(File::exists($path))
@@ -50,7 +47,7 @@ it('saves model', function () {
 });
 
 it('deletes model', function () {
-    $model = FlatFileModel::create([
+    $model = YamlSerializerModel::create([
         'name' => 'some-name',
         'data' => ['some' => 'data'],
     ]);

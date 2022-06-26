@@ -1,12 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Authanram\FlatFile;
 
 use Authanram\FlatFile\Contracts\FlatFileContract;
+use Authanram\FlatFile\Serializers\Serializer;
 use Illuminate\Database\Eloquent\Model;
 use Sushi\Sushi;
 use Throwable;
 
+/**
+ * @property $this $flatFileSerializer
+ */
 trait FlatFileModel
 {
     use Sushi;
@@ -32,6 +38,11 @@ trait FlatFileModel
         return self::$flatFile ?? (new FlatFile())
             ->setStorageAdapter(config('flatfile.storage_adapter'))
             ->setEventHandlers(config('flatfile.event_handlers'));
+    }
+
+    public static function flatFileSerializer(): Serializer|string|null
+    {
+        return static::$flatFileSerializer ?? null;
     }
 
     /**

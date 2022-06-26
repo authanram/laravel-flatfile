@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Authanram\FlatFile;
 
 use Illuminate\Support\ServiceProvider;
 
-class FlatFileServiceProvider extends ServiceProvider
+final class FlatFileServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {

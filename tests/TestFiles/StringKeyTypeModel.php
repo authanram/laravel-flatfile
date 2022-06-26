@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Authanram\FlatFile\Tests\TestFiles;
 
-class StringKeyTypeModel extends FlatFileModel
+class StringKeyTypeModel extends JsonSerializerModel
 {
     use HasUuidKey;
 

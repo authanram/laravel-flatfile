@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Authanram\FlatFile\Tests\TestFiles;
 
 use Illuminate\Support\Str;

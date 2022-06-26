@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Authanram\FlatFile\Contracts;
 
 use Illuminate\Database\Eloquent\Model;

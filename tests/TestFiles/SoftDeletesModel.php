@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Authanram\FlatFile\Tests\TestFiles;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SoftDeletesModel extends FlatFileModel
+class SoftDeletesModel extends JsonSerializerModel
 {
     use SoftDeletes;
 

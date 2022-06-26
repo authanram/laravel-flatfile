@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Authanram\FlatFile\Adapters\FilesystemAdapter;
 use Authanram\FlatFile\EventHandlers;
 use Authanram\FlatFile\Serializers\JsonSerializer;

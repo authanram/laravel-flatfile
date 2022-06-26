@@ -1,7 +1,7 @@
 <?php /** @noinspection PhpUnhandledExceptionInspection, StaticClosureCanBeUsedInspection */
 
 use Authanram\FlatFile\Adapters\FilesystemAdapter;
-use Authanram\FlatFile\Tests\TestFiles\FlatFileModel;
+use Authanram\FlatFile\Tests\TestFiles\JsonSerializerModel;
 use Illuminate\Support\Facades\File;
 use function Spatie\Snapshots\assertMatchesSnapshot;
 
@@ -14,18 +14,18 @@ it('throws on invalid serializer', function () {
 })->expectExceptionMessage('Expected "Authanram\FlatFile\Serializers\Serializer" got: string');
 
 it('locates the models storage directory', function () {
-    expect($this->filesystemAdapter->locate(new FlatFileModel))
-        ->toEqual(realpath(__DIR__.'/../TestFiles/flatfile/flat-file-model'));
+    expect($this->filesystemAdapter->locate(new JsonSerializerModel))
+        ->toEqual(realpath(__DIR__ . '/../TestFiles/flatfile/json-serializer-model'));
 });
 
 it('locates the models storage file', function () {
-    expect($this->filesystemAdapter->locate(FlatFileModel::first()))
-        ->toEqual(realpath(__DIR__.'/../TestFiles/flatfile/flat-file-model/1.json'));
+    expect($this->filesystemAdapter->locate(JsonSerializerModel::first()))
+        ->toEqual(realpath(__DIR__ . '/../TestFiles/flatfile/json-serializer-model/1.json'));
 });
 
 it('reads from the storage', function () {
     /** @noinspection PhpUnhandledExceptionInspection */
-    $contents = $this->filesystemAdapter->get(new FlatFileModel);
+    $contents = $this->filesystemAdapter->get(new JsonSerializerModel);
 
     expect($contents)
         ->toBeArray()
@@ -35,7 +35,7 @@ it('reads from the storage', function () {
 });
 
 it('writes to the storage', function () {
-    $model = FlatFileModel::create([
+    $model = JsonSerializerModel::create([
         'name' => 'some-name',
         'data' => ['some' => 'data'],
     ]);

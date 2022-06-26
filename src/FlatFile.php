@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Authanram\FlatFile;
 
-use InvalidArgumentException;
 use Authanram\FlatFile\Contracts\FlatFileAdapterContract as AdapterContract;
 use Authanram\FlatFile\Contracts\FlatFileContract;
+use InvalidArgumentException;
 use Throwable;
 
 final class FlatFile implements FlatFileContract
@@ -38,17 +40,7 @@ final class FlatFile implements FlatFileContract
      */
     public function setEventHandlers(array|string $eventHandlers): self
     {
-        throw_if(
-            is_array($eventHandlers) && array_is_list($eventHandlers),
-            InvalidArgumentException::class,
-            'Expected map - associative array with string keys.',
-        );
-
-        throw_if(
-            is_string($eventHandlers) && class_exists($eventHandlers) === false,
-            InvalidArgumentException::class,
-            "Class not found: $eventHandlers",
-        );
+        self::authorizeEventHandlers($eventHandlers);
 
         if (is_string($eventHandlers)) {
             $eventHandlers = collect(get_class_methods($eventHandlers))
@@ -62,12 +54,30 @@ final class FlatFile implements FlatFileContract
                 throw_if(
                     is_callable($eventHandlers) === false,
                     InvalidArgumentException::class,
-                    sprintf('Expected a callable. Got: %s', gettype($eventHandlers)),
+                    'Expected a callable. Got: '. gettype($eventHandlers),
                 );
 
                 return [$key => $eventHandlers];
             })->toArray();
 
         return $this;
+    }
+
+    /**
+     * @throws Throwable
+     */
+    private static function authorizeEventHandlers(array|string $eventHandlers): void
+    {
+        throw_if(
+            is_array($eventHandlers) && array_is_list($eventHandlers),
+            InvalidArgumentException::class,
+            'Expected map - associative array with string keys.',
+        );
+
+        throw_if(
+            is_string($eventHandlers) && class_exists($eventHandlers) === false,
+            InvalidArgumentException::class,
+            'Class not found: '.$eventHandlers,
+        );
     }
 }

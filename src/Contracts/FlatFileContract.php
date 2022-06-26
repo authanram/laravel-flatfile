@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Authanram\FlatFile\Contracts;
 
 use Authanram\FlatFile\Contracts\FlatFileAdapterContract as AdapterContract;
