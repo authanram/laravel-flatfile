@@ -13,17 +13,17 @@ it('throws on invalid serializer', function () {
     new FilesystemAdapter([], 'invalid-serializer');
 })->expectExceptionMessage('Expected "Authanram\FlatFile\Serializers\Serializer" got: string');
 
-it('locates a models storage directory', function () {
+it('locates the models storage directory', function () {
     expect($this->filesystemAdapter->locate(new FlatFileModel))
         ->toEqual(realpath(__DIR__.'/../TestFiles/flatfile/flat-file-model'));
 });
 
-it('locates a models flat file', function () {
+it('locates the models storage file', function () {
     expect($this->filesystemAdapter->locate(FlatFileModel::first()))
         ->toEqual(realpath(__DIR__.'/../TestFiles/flatfile/flat-file-model/1.json'));
 });
 
-it('reads', function () {
+it('reads from the storage', function () {
     /** @noinspection PhpUnhandledExceptionInspection */
     $contents = $this->filesystemAdapter->get(new FlatFileModel);
 
@@ -34,7 +34,7 @@ it('reads', function () {
     assertMatchesSnapshot($contents);
 });
 
-it('writes', function () {
+it('writes to the storage', function () {
     $model = FlatFileModel::create([
         'name' => 'foobar',
         'data' => ['some' => 'data'],

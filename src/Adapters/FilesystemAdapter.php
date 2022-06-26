@@ -45,21 +45,29 @@ final class FilesystemAdapter implements FlatFileAdapterContract
 
     public function get(Model|string $model): array
     {
-        return collect($this->storage->files($this->getRelativeStoragePath($model)))
+        return collect($this->storage->files($this->getStoragePath($model)))
             ->map(fn (string $path) => $this->serializer::decode($this->storage->get($path)))
             ->toArray();
     }
 
     public function set(Model $model): bool
     {
-        $path = $this->getRelativeStoragePath($model);
+        $path = $this->getStoragePath($model);
 
-        return $model->exists
-            ? $this->storage->put($path, $this->serializer::encode($model->getAttributes()))
-            : $this->storage->delete($path);
+        if ($model->exists) {
+            return $this->storage->put($path, $this->serializer::encode($model->getAttributes()));
+        }
+
+        $result = $this->storage->delete($path);
+
+        $directory = dirname($path);
+
+        return $result && count($this->storage->files($directory)) === 0
+            ? $this->storage->deleteDirectory($directory)
+            : $result;
     }
 
-    private function getRelativeStoragePath(Model|string $model): string
+    private function getStoragePath(Model|string $model): string
     {
         return str_replace($this->storage->path(''), '', $this->locate($model));
     }
