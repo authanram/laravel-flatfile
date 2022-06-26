@@ -1,9 +1,8 @@
 <?php
 
-namespace Authanram\FlatFile\Concerns;
+namespace Authanram\FlatFile;
 
 use Authanram\FlatFile\Contracts\FlatFileContract;
-use Authanram\FlatFile\FlatFile;
 use Illuminate\Database\Eloquent\Model;
 use Sushi\Sushi;
 use Throwable;
@@ -47,6 +46,6 @@ trait FlatFileModel
 
     public function usesTimestamps(): bool
     {
-        return $this->timestamps;
+        return $this->timestamps ?? false;
     }
 }

@@ -6,7 +6,7 @@ use Eloquent;
 
 class FlatFileModel extends Eloquent
 {
-    use \Authanram\FlatFile\Concerns\FlatFileModel;
+    use \Authanram\FlatFile\FlatFileModel;
 
     protected array $schema = [
         'name' => 'string',
