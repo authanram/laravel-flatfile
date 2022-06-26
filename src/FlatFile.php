@@ -68,16 +68,12 @@ final class FlatFile implements FlatFileContract
      */
     private static function authorizeEventHandlers(array|string $eventHandlers): void
     {
-        throw_if(
-            is_array($eventHandlers) && array_is_list($eventHandlers),
-            InvalidArgumentException::class,
-            'Expected map - associative array with string keys.',
-        );
+        if (is_array($eventHandlers) && array_is_list($eventHandlers)) {
+            throw new InvalidArgumentException('Expected map - associative array with string keys.');
+        }
 
-        throw_if(
-            is_string($eventHandlers) && class_exists($eventHandlers) === false,
-            InvalidArgumentException::class,
-            'Class not found: '.$eventHandlers,
-        );
+        if (is_string($eventHandlers) && class_exists($eventHandlers) === false) {
+            throw new InvalidArgumentException('Class not found: '.$eventHandlers);
+        }
     }
 }

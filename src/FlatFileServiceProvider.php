@@ -12,10 +12,6 @@ final class FlatFileServiceProvider extends ServiceProvider
     {
         $this->bootRunningUnitTests();
 
-        if ($this->app->runningUnitTests()) {
-            return;
-        }
-
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'flatfile');
 
         $this->publishes([

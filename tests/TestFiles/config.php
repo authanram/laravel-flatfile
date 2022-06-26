@@ -32,5 +32,12 @@ return [
     |
     */
 
-    'event_handlers' => EventHandlers::class,
+    'event_handlers' => [
+        'saved' => static function ($model) {
+            return EventHandlers::saved($model);
+        },
+        'deleted' => static function ($model) {
+            return EventHandlers::deleted($model);
+        },
+    ],
 ];

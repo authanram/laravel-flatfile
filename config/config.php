@@ -17,7 +17,7 @@ return [
 
     'storage_adapter' => new FilesystemAdapter([
         'driver' => 'local',
-        'root' => __DIR__ . '/flatfile',
+        'root' => storage_path('app/flatfile'),
         'throw' => true,
     ], JsonSerializer::class),
 
@@ -30,5 +30,12 @@ return [
     |
     */
 
-    'event_handlers' => EventHandlers::class,
+    'event_handlers' => [
+        'saved' => static function ($model) {
+            return EventHandlers::saved($model);
+        },
+        'deleted' => static function ($model) {
+            return EventHandlers::deleted($model);
+        },
+    ],
 ];
