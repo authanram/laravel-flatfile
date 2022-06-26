@@ -24,15 +24,15 @@ it('retrieves models', function () {
 });
 
 it('saves model', function () {
-    $model = (new FlatFileModel)
-        ->setAttribute('id', 777)
-        ->setAttribute('name', 'foobar')
-        ->setAttribute('data', [
+    $model = FlatFileModel::create([
+        'name' => 'foobar',
+        'data' => [
             'some-data' => 'as json',
             'some-float' => 777,
-        ]);
+        ],
+    ]);
 
-    expect($model->save())->toBeTrue();
+    expect($model->exists)->toBeTrue();
 
     $path = $model::flatFile()
         ->getAdapter()
