@@ -8,13 +8,18 @@ final class EventHandlers
 {
     public static function saved(Model $model): bool
     {
-        return $model::{'flatFile'}()->getAdapter()->set($model);
+        return self::set($model);
     }
 
     public static function deleted(Model $model): bool
     {
-        dump(__FUNCTION__);
+        return self::set($model);
+    }
 
-        return true;
+    private static function set(Model $model): bool
+    {
+        return $model::{'flatFile'}()
+            ->getStorageAdapter()
+            ->set($model);
     }
 }

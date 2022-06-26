@@ -41,7 +41,7 @@ it('writes', function () {
     ]);
 
     $path = $model::flatFile()
-        ->getAdapter()
+        ->getStorageAdapter()
         ->locate($model);
 
     expect($this->filesystemAdapter->set($model))

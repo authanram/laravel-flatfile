@@ -26,7 +26,7 @@ trait FlatModel
     public function getRows(): array
     {
         return static::flatFile()
-            ->getAdapter()
+            ->getStorageAdapter()
             ->get($this::class);
     }
 }

@@ -32,7 +32,7 @@ final class FilesystemAdapter implements FlatFileAdapterContract
 
         $path = Str::kebab(class_basename($className));
 
-        if (is_object($model) && $model->exists) {
+        if (is_object($model) && is_null($model->getKey()) === false) {
             $path = Str::of($path)
                 ->append('/')
                 ->append($model->getKey())
@@ -52,10 +52,11 @@ final class FilesystemAdapter implements FlatFileAdapterContract
 
     public function set(Model $model): bool
     {
-        return $this->storage->put(
-            $this->getRelativeStoragePath($model),
-            $this->serializer::encode($model->getAttributes()),
-        );
+        $path = $this->getRelativeStoragePath($model);
+
+        return $model->exists
+            ? $this->storage->put($path, $this->serializer::encode($model->getAttributes()))
+            : $this->storage->delete($path);
     }
 
     private function getRelativeStoragePath(Model|string $model): string

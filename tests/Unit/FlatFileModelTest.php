@@ -6,9 +6,11 @@ use Illuminate\Support\Facades\File;
 use function Spatie\Snapshots\assertMatchesSnapshot;
 
 it('retrieves first model', function () {
-    $result = FlatFileModel::first();
-    expect($result)->toBeInstanceOf(FlatFileModel::class);
-    assertMatchesSnapshot($result?->toArray());
+    $model = FlatFileModel::first();
+
+    expect($model)->toBeInstanceOf(FlatFileModel::class);
+
+    assertMatchesSnapshot($model?->getAttributes());
 });
 
 it('retrieves models', function () {
@@ -35,7 +37,7 @@ it('saves model', function () {
     expect($model->exists)->toBeTrue();
 
     $path = $model::flatFile()
-        ->getAdapter()
+        ->getStorageAdapter()
         ->locate($model);
 
     /**
@@ -43,16 +45,16 @@ it('saves model', function () {
      * @noinspection JsonEncodingApiUsageInspection
      */
     expect(File::get($path))
-        ->toEqual(json_encode($model->getAttributes(), JSON_PRETTY_PRINT))
-        ->and(File::delete($path))
-        ->toBeTrue()
-        ->and(File::exists($path))
-        ->toBeFalse();
+        ->toEqual(json_encode($model->getAttributes(), JSON_PRETTY_PRINT));
 });
 
 it('deletes model', function () {
-//    $model = FlatFileModel::first();
-//    $model?->delete();
+    $model = FlatFileModel::latest()->first();
 
-    expect(true)->toBeTrue();
+    expect($model?->getKey())
+        ->toEqual(4)
+        ->and($model?->delete())
+        ->toBeTrue()
+        ->and(File::exists(__DIR__.'/../TestFiles/flatfile/flat-file-model/4.json'))
+        ->toBeFalse();
 });

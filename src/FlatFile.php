@@ -16,7 +16,7 @@ final class FlatFile implements FlatFileContract
     /**
      * @throws Throwable
      */
-    public function getAdapter(): AdapterContract
+    public function getStorageAdapter(): AdapterContract
     {
         if (isset($this->adapter)) {
             return $this->adapter;
