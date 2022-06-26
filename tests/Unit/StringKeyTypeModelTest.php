@@ -17,7 +17,7 @@ it('supports uuid keys', function () {
 
 it('writes to storage', function () {
     $model = StringKeyTypeModel::create([
-        'name' => 'foobar',
+        'name' => 'some-name',
         'data' => ['some' => 'data'],
     ]);
 

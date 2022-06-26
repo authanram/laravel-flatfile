@@ -27,7 +27,7 @@ it('retrieves models', function () {
 
 it('saves model', function () {
     $model = FlatFileModel::create([
-        'name' => 'foobar',
+        'name' => 'some-name',
         'data' => ['some' => 'data'],
     ]);
 
@@ -51,7 +51,8 @@ it('saves model', function () {
 
 it('deletes model', function () {
     $model = FlatFileModel::create([
-        'name' => 'foobar',
+        'name' => 'some-name',
+        'data' => ['some' => 'data'],
     ]);
 
     $path = $model::flatFile()

@@ -2,15 +2,11 @@
 
 namespace Authanram\FlatFile\Tests\TestFiles;
 
-//use Illuminate\Database\Eloquent\SoftDeletes;
 use Eloquent;
 
 class FlatFileModel extends Eloquent
 {
-    use \Authanram\FlatFile\FlatFileModel;
-//    use SoftDeletes;
-
-    public $timestamps = true;
+    use \Authanram\FlatFile\Concerns\FlatFileModel;
 
     protected array $schema = [
         'name' => 'string',

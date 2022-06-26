@@ -1,8 +1,9 @@
 <?php
 
-namespace Authanram\FlatFile;
+namespace Authanram\FlatFile\Concerns;
 
 use Authanram\FlatFile\Contracts\FlatFileContract;
+use Authanram\FlatFile\FlatFile;
 use Illuminate\Database\Eloquent\Model;
 use Sushi\Sushi;
 use Throwable;
@@ -42,5 +43,10 @@ trait FlatFileModel
         return self::flatFile()
             ->getStorageAdapter()
             ->get($this::class);
+    }
+
+    public function usesTimestamps(): bool
+    {
+        return $this->timestamps;
     }
 }

@@ -36,7 +36,7 @@ it('reads from the storage', function () {
 
 it('writes to the storage', function () {
     $model = FlatFileModel::create([
-        'name' => 'foobar',
+        'name' => 'some-name',
         'data' => ['some' => 'data'],
     ]);
 
