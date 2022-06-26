@@ -10,5 +10,5 @@ interface FlatFileAdapterContract
 
     public function get(Model|string $model): array;
 
-    public function set(Model $model): self;
+    public function set(Model $model): bool;
 }

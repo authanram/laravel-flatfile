@@ -11,11 +11,6 @@ it('throws on invalid adapter', function () {
     $this->flatFile->getAdapter();
 })->expectExceptionMessage('Expected "Authanram\FlatFile\Contracts\FlatFileAdapterContract" got: string');
 
-it('throws on invalid serializer', function () {
-    config()->set('flatfile.serializer', 'invalid-value');
-    $this->flatFile->getSerializer();
-})->expectExceptionMessage('Expected "Authanram\FlatFile\Serializers\Serializer" got: string');
-
 it('throws on invalid event handlers', function () {
     config()->set('flatfile.event_handlers', ['array', 'list']);
     $this->flatFile->getEventHandlers();
@@ -24,11 +19,6 @@ it('throws on invalid event handlers', function () {
 it('gets the adapter', function () {
     expect($this->flatFile->getAdapter()::class)
         ->toEqual(config('flatfile.storage_adapter')::class);
-});
-
-it('gets the serializer', function () {
-    expect($this->flatFile->getSerializer())
-        ->toEqual(config('flatfile.serializer'));
 });
 
 it('gets the event handlers', function () {

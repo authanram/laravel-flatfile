@@ -1,0 +1,7 @@
+{
+    "id": 777,
+    "name": "foobar",
+    "data": "{\"some-data\":\"as json\",\"some-float\":777}",
+    "updated_at": "2022-06-26 01:38:20",
+    "created_at": "2022-06-26 01:38:20"
+}

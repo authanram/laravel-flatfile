@@ -2,18 +2,14 @@
 
 namespace Authanram\FlatFile;
 
-use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 use Authanram\FlatFile\Contracts\FlatFileAdapterContract as AdapterContract;
 use Authanram\FlatFile\Contracts\FlatFileContract;
-use Authanram\FlatFile\Serializers\Serializer;
 use Throwable;
 
 final class FlatFile implements FlatFileContract
 {
     private AdapterContract $adapter;
-
-    private Serializer|string $serializer;
 
     private array $eventHandlers;
 
@@ -37,28 +33,6 @@ final class FlatFile implements FlatFileContract
         $this->adapter = $subject;
 
         return $this->adapter;
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function getSerializer(): Serializer|string
-    {
-        if (isset($this->serializer)) {
-            return $this->serializer;
-        }
-
-        $subject = config('flatfile.serializer');
-
-        throw_if(
-            is_subclass_of($subject, Serializer::class) === false,
-            InvalidArgumentException::class,
-            sprintf('Expected "%s" got: %s', Serializer::class, gettype($subject)),
-        );
-
-        $this->serializer = $subject;
-
-        return $this->serializer;
     }
 
     /**

@@ -15,21 +15,11 @@ return [
     |
     */
 
-    'storage_adapter' => FilesystemAdapter::build([
+    'storage_adapter' => new FilesystemAdapter([
         'driver' => 'local',
-        'root' => __DIR__ . '/flat-file-model',
-    ]),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Serializer
-    |--------------------------------------------------------------------------
-    |
-    | ...
-    |
-    */
-
-    'serializer' => JsonSerializer::class,
+        'root' => __DIR__ . '/flatfile',
+        'throw' => true,
+    ], JsonSerializer::class),
 
     /*
     |--------------------------------------------------------------------------

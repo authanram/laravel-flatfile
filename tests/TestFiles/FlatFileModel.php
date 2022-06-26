@@ -15,7 +15,7 @@ class FlatFileModel extends Eloquent
 
     protected array $schema = [
         'name' => 'string',
-        'data' => 'string',
+        'data' => 'json',
     ];
 
     protected $fillable = [

@@ -8,16 +8,12 @@ final class EventHandlers
 {
     public static function saved(Model $model): bool
     {
-        dump(__FUNCTION__);
-//        dump([__FUNCTION__ => $model]);
-
-        return true;
+        return $model::{'flatFile'}()->getAdapter()->set($model);
     }
 
     public static function deleted(Model $model): bool
     {
         dump(__FUNCTION__);
-//        dump([__FUNCTION__ => $model]);
 
         return true;
     }

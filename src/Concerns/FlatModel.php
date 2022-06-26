@@ -2,9 +2,7 @@
 
 namespace Authanram\FlatFile\Concerns;
 
-use Authanram\FlatFile\Contracts\FlatFileAdapterContract;
 use Authanram\FlatFile\Contracts\FlatFileContract;
-use Authanram\FlatFile\Serializers\Serializer;
 use Illuminate\Database\Eloquent\Model;
 use Sushi\Sushi;
 
@@ -12,27 +10,23 @@ trait FlatModel
 {
     use Sushi;
 
-    public static FlatFileAdapterContract $flatFileAdapter;
-    public static Serializer|string $flatFileSerializer;
-
     public static function bootFlatModel(): void
     {
-        $flatFile = resolve(FlatFileContract::class);
-        $eventHandlers = $flatFile->getEventHandlers();
-
-        foreach ($eventHandlers as $name => $handler) {
-            static::{$name}(static function (Model $model) use ($flatFile, $handler) {
-                $model::$flatFileAdapter ??= $flatFile->getAdapter();
-                $model::$flatFileSerializer ??= $flatFile->getSerializer();
-                $handler($model);
+        collect(static::flatFile()->getEventHandlers())
+            ->each(function (callable $handler, string $name) {
+                static::{$name}(static fn (Model $model) => $handler($model));
             });
-        }
+    }
+
+    public static function flatFile(): FlatFileContract
+    {
+        return resolve(FlatFileContract::class);
     }
 
     public function getRows(): array
     {
-        return [
-            ['foo' => 'bar'],
-        ];
+        return static::flatFile()
+            ->getAdapter()
+            ->get($this::class);
     }
 }
