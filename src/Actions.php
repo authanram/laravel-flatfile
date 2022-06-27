@@ -37,9 +37,13 @@ final class Actions
      */
     public static function delete(FlatFile $flatFile): bool
     {
-        if ($flatFile->getModel()::class === SoftDeletesModel::class) {
-            dd($flatFile->getModel()->del);
+        if (method_exists($flatFile->getModel(), 'trashed')
+        ) {
+            dd(333, $flatFile->getModel());
+            return true;
         }
+
+        dump($flatFile->getModel());
 
         return $flatFile->getStorage()->delete($flatFile->getPathResolver()->getRelative());
     }
