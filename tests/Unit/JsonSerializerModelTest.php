@@ -33,9 +33,7 @@ it('saves model', function () {
 
     expect($model->exists)->toBeTrue();
 
-    $path = $model::flatFile()
-        ->getStorageAdapter()
-        ->locate($model);
+    $path = __DIR__.'/../TestFiles/flatfile/json-serializer-model/4.json';
 
     /**
      * @noinspection PhpUnhandledExceptionInspection
@@ -55,9 +53,7 @@ it('deletes model', function () {
         'data' => ['some' => 'data'],
     ]);
 
-    $path = $model::flatFile()
-        ->getStorageAdapter()
-        ->locate($model);
+    $path = __DIR__.'/../TestFiles/flatfile/json-serializer-model/4.json';
 
     expect($model->getKey())
         ->toEqual(4)

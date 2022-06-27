@@ -1,28 +1,32 @@
 <?php /** @noinspection PhpUnhandledExceptionInspection, StaticClosureCanBeUsedInspection */
 
 use Authanram\FlatFile\FlatFile;
+use Authanram\FlatFile\PathResolver;
+use Authanram\FlatFile\Tests\TestFiles\JsonSerializerModel;
+use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Support\Facades\Storage;
 
 beforeEach(function () {
     /** @noinspection PhpUnhandledExceptionInspection */
     $this->flatFile = (new FlatFile())
-        ->setStorageAdapter(config('flatfile.storage_adapter'))
-        ->setEventHandlers(config('flatfile.event_handlers'));
+        ->setModel(JsonSerializerModel::class)
+        ->setSerializer(config('flatfile.serializer'))
+        ->setStorage(Storage::build(config('flatfile.disk')));
 });
 
-it('throws on invalid event handlers', function () {
-    $this->flatFile->setEventHandlers(['array', 'list']);
-})->expectExceptionMessage('Expected map - associative array with string keys.');
-
-it('gets the storage adapter', function () {
-    expect($this->flatFile->getStorageAdapter()::class)
-        ->toEqual(config('flatfile.storage_adapter')::class);
+it('gets the model', function () {
+    expect($this->flatFile->getModel())
+        ->toEqual(JsonSerializerModel::class);
 });
 
-it('gets the event handlers', function () {
-    $subject = $this->flatFile->getEventHandlers();
+it('gets the path resolver', function () {
+    expect($this->flatFile->getPathResolver())
+        ->toBeInstanceOf(PathResolver::class);
+});
 
-    $result = (is_array($subject) && array_is_list($subject) === false)
-        || (is_string($subject) && class_exists($subject));
-
-    expect($result)->toBeTrue();
+it('gets the storage', function () {
+    expect($this->flatFile->getStorage())
+        ->toBeInstanceOf(FilesystemAdapter::class)
+        ->and($this->flatFile->getStorage()->getConfig())
+        ->toEqual(config('flatfile.disk'));
 });

@@ -4,15 +4,24 @@ declare(strict_types=1);
 
 namespace Authanram\FlatFile\Contracts;
 
-use Authanram\FlatFile\Contracts\FlatFileAdapterContract as AdapterContract;
+use Authanram\FlatFile\PathResolver;
+use Authanram\FlatFile\Serializers\Serializer;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Filesystem\FilesystemAdapter;
 
 interface FlatFileContract
 {
-    public function getStorageAdapter(): FlatFileAdapterContract;
+    public function getStorage(): FilesystemAdapter;
 
-    public function setStorageAdapter(AdapterContract $storageAdapter): self;
+    public function setStorage(FilesystemAdapter $storage): self;
 
-    public function getEventHandlers(): array;
+    public function getSerializer(): Serializer|string;
 
-    public function setEventHandlers(array|string $eventHandlers): self;
+    public function setSerializer(Serializer|string $serializer): self;
+
+    public function getModel(): Model|string;
+
+    public function setModel(Model|string $model): self;
+
+    public function getPathResolver(): PathResolver;
 }

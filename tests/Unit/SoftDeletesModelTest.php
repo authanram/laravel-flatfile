@@ -9,9 +9,7 @@ it('can be soft-deleted', function () {
         'data' => ['some' => 'data'],
     ]);
 
-    $path = $model::flatFile()
-        ->getStorageAdapter()
-        ->locate($model);
+    $path = __DIR__.'/../TestFiles/flatfile/soft-deletes-model/1.json';
 
     expect(SoftDeletesModel::onlyTrashed()->get())
         ->toBeEmpty();
@@ -37,9 +35,7 @@ it('can be force-deleted', function () {
     /** @var SoftDeletesModel $model */
     $model = SoftDeletesModel::first();
 
-    $path = $model::flatFile()
-        ->getStorageAdapter()
-        ->locate($model);
+    $path = __DIR__.'/../TestFiles/flatfile/soft-deletes-model/1.json';
 
     expect($model->forceDelete())
         ->toBeTrue()

@@ -4,10 +4,19 @@ declare(strict_types=1);
 
 namespace Authanram\FlatFile;
 
+use Authanram\FlatFile\Contracts\FlatFileContract;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 
 final class FlatFileServiceProvider extends ServiceProvider
 {
+    public function register(): void
+    {
+        $this->app->singleton(FlatFileContract::class, function () {
+            return (new FlatFile())->setStorage(Storage::build(config('flatfile.disk')));
+        });
+    }
+
     public function boot(): void
     {
         $this->bootRunningUnitTests();
