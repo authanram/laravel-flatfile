@@ -33,9 +33,7 @@ it('saves model', function () {
 
     expect($model->exists)->toBeTrue();
 
-    $path = $model::flatFile()
-        ->getStorageAdapter()
-        ->locate($model);
+    $path = (string)flatFile($model)->getPathResolver();
 
     /**
      * @noinspection PhpUnhandledExceptionInspection
@@ -55,9 +53,7 @@ it('deletes model', function () {
         'data' => ['some' => 'data'],
     ]);
 
-    $path = $model::flatFile()
-        ->getStorageAdapter()
-        ->locate($model);
+    $path = (string)flatFile($model)->getPathResolver();
 
     expect($model->getKey())
         ->toEqual(4)

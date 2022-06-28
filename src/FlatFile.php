@@ -4,61 +4,62 @@ declare(strict_types=1);
 
 namespace Authanram\FlatFile;
 
-use Authanram\FlatFile\Contracts\FlatFileAdapterContract as AdapterContract;
-use Authanram\FlatFile\Contracts\FlatFileContract;
+use Authanram\FlatFile\Serializers\Serializer;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Filesystem\FilesystemAdapter;
 use InvalidArgumentException;
 use Throwable;
 
 final class FlatFile implements FlatFileContract
 {
-    private AdapterContract $storageAdapter;
+    private FilesystemAdapter $storage;
 
-    private array $eventHandlers;
+    private Serializer|string $serializer;
+
+    private Model|string $model;
 
     /**
      * @throws Throwable
      */
-    public function getStorageAdapter(): AdapterContract
+    public function getStorage(): FilesystemAdapter
     {
-        return $this->storageAdapter;
+        return $this->storage;
     }
 
-    public function setStorageAdapter(AdapterContract $storageAdapter): self
+    public function setStorage(FilesystemAdapter $storage): self
     {
-        $this->storageAdapter = $storageAdapter;
+        $this->storage = $storage;
 
         return $this;
     }
 
-    public function getEventHandlers(): array
+    public function getSerializer(): Serializer|string
     {
-        return $this->eventHandlers;
+        return $this->serializer;
     }
 
-    /**
-     * @throws Throwable
-     */
-    public function setEventHandlers(array|string $eventHandlers): self
+    public function setSerializer(Serializer|string $serializer): self
     {
-        self::authorizeEventHandlers($eventHandlers);
+        /** @noinspection PhpUnhandledExceptionInspection */
+        throw_if(
+            is_subclass_of($serializer, Serializer::class) === false,
+            InvalidArgumentException::class,
+            sprintf('Expected "%s" got: %s', Serializer::class, gettype($serializer)),
+        );
 
-        if (is_string($eventHandlers)) {
-            $eventHandlers = collect(get_class_methods($eventHandlers))
-                ->mapWithKeys(fn (string $method) => [
-                    $method => fn (...$args) => $eventHandlers::{$method}(...$args),
-                ])->toArray();
-        }
+        $this->serializer = $serializer;
 
-        $this->eventHandlers = collect($eventHandlers)
-            ->mapWithKeys(static function ($eventHandlers, string $key) {
-                throw_if(
-                    is_callable($eventHandlers) === false,
-                    InvalidArgumentException::class,
-                    'Expected a callable. Got: '. gettype($eventHandlers),
-                );
+        return $this;
+    }
 
-                return [$key => $eventHandlers];
-            })->toArray();
+    public function getModel(): Model|string
+    {
+        return $this->model;
+    }
+
+    public function setModel(Model|string $model): self
+    {
+        $this->model = $model;
 
         return $this;
     }
@@ -66,14 +67,12 @@ final class FlatFile implements FlatFileContract
     /**
      * @throws Throwable
      */
-    private static function authorizeEventHandlers(array|string $eventHandlers): void
+    public function getPathResolver(): PathResolver
     {
-        if (is_array($eventHandlers) && array_is_list($eventHandlers)) {
-            throw new InvalidArgumentException('Expected map - associative array with string keys.');
-        }
-
-        if (is_string($eventHandlers) && class_exists($eventHandlers) === false) {
-            throw new InvalidArgumentException('Class not found: '.$eventHandlers);
-        }
+        return PathResolver::make(
+            $this->model,
+            $this->getStorage()->path('.'),
+            $this->getSerializer()::extension(),
+        );
     }
 }

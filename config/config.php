@@ -1,41 +1,34 @@
 <?php
 
-use Authanram\FlatFile\Adapters\FilesystemAdapter;
-use Authanram\FlatFile\EventHandlers;
+declare(strict_types=1);
+
 use Authanram\FlatFile\Serializers\JsonSerializer;
 
 return [
 
     /*
     |--------------------------------------------------------------------------
-    | Storage Adapter
+    | Disk Configuration
     |--------------------------------------------------------------------------
     |
     | ...
     |
     */
 
-    'storage_adapter' => new FilesystemAdapter([
+    'disk' => [
         'driver' => 'local',
         'root' => storage_path('app/flatfile'),
         'throw' => true,
-    ], JsonSerializer::class),
+    ],
 
     /*
     |--------------------------------------------------------------------------
-    | Event Handlers
+    | Serializer
     |--------------------------------------------------------------------------
     |
     | ...
     |
     */
 
-    'event_handlers' => [
-        'saved' => static function ($model) {
-            return EventHandlers::saved($model);
-        },
-        'deleted' => static function ($model) {
-            return EventHandlers::deleted($model);
-        },
-    ],
+    'serializer' => JsonSerializer::class,
 ];

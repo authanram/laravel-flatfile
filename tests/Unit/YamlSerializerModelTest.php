@@ -34,9 +34,7 @@ it('saves model', function () {
 
     expect($model->exists)->toBeTrue();
 
-    $path = $model::flatFile()
-        ->getStorageAdapter()
-        ->locate($model);
+    $path = (string)flatFile($model)->getPathResolver();
 
     expect(File::get($path))
         ->toEqual(Yaml::dump($model->getAttributes()))
@@ -52,9 +50,7 @@ it('deletes model', function () {
         'data' => ['some' => 'data'],
     ]);
 
-    $path = $model::flatFile()
-        ->getStorageAdapter()
-        ->locate($model);
+    $path = (string)flatFile($model)->getPathResolver();
 
     expect($model->getKey())
         ->toEqual(4)
