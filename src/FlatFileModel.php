@@ -20,8 +20,8 @@ trait FlatFileModel
      */
     public static function bootFlatFileModel(): void
     {
-        static::saved(static fn (Model $model) => Actions::saved(self::flatFile($model)));
-        static::deleted(static fn (Model $model) => Actions::deleted(self::flatFile($model)));
+        static::saved(static fn (Model $model) => Handlers::save(self::flatFile($model)));
+        static::deleted(static fn (Model $model) => Handlers::delete(self::flatFile($model)));
     }
 
     /**
@@ -29,7 +29,7 @@ trait FlatFileModel
      */
     public function getRows(): array
     {
-        return Actions::all(self::flatFile(static::class));
+        return Handlers::all(self::flatFile(static::class));
     }
 
     public function usesTimestamps(): bool

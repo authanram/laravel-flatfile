@@ -28,7 +28,7 @@ php artisan vendor:publish --provider="Authanram\FlatFile\FlatFileServiceProvide
 
 Quickly examining the configuration file `config/flatfile.php` would be a good idea.
 
-## Basic Usage Example
+## Usage Example
 
 Here's an example of how it can be used in a very basic way:
 
