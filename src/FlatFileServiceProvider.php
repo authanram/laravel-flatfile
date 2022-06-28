@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Authanram\FlatFile;
 
-use Authanram\FlatFile\Contracts\FlatFileContract;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 

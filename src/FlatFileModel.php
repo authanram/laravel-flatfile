@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Authanram\FlatFile;
 
-use Authanram\FlatFile\Contracts\FlatFileContract;
 use Illuminate\Database\Eloquent\Model;
 use Sushi\Sushi;
 use Throwable;
@@ -21,8 +20,8 @@ trait FlatFileModel
      */
     public static function bootFlatFileModel(): void
     {
-        static::saved(static fn (Model $model) => Actions::save(self::flatFile($model)));
-        static::deleted(static fn (Model $model) => Actions::delete(self::flatFile($model)));
+        static::saved(static fn (Model $model) => Actions::saved(self::flatFile($model)));
+        static::deleted(static fn (Model $model) => Actions::deleted(self::flatFile($model)));
     }
 
     /**

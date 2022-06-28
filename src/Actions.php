@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Authanram\FlatFile;
 
 use Authanram\FlatFile\Serializers\Serializer;
-use Authanram\FlatFile\Tests\TestFiles\SoftDeletesModel;
 use Throwable;
 
 final class Actions
@@ -15,7 +14,11 @@ final class Actions
      */
     public static function all(FlatFile $flatFile): array
     {
-        return collect($flatFile->getStorage()->files($flatFile->getPathResolver()->getRelative()))
+        $files = $flatFile->getStorage()->files(
+            $flatFile->getPathResolver()->getRelativePath(),
+        );
+
+        return collect($files)
             ->map(fn ($path) => self::decode(
                 $flatFile->getSerializer(),
                 $flatFile->getStorage()->get($path)),
@@ -25,27 +28,37 @@ final class Actions
     /**
      * @throws Throwable
      */
-    public static function save(FlatFile $flatFile): bool
+    public static function saved(FlatFile $flatFile): bool
     {
-        $contents = self::encode($flatFile->getSerializer(), $flatFile->getModel()->getAttributes());
+        $contents = self::encode(
+            $flatFile->getSerializer(),
+            $flatFile->getModel()->getAttributes(),
+        );
 
-        return $flatFile->getStorage()->put($flatFile->getPathResolver()->getRelative(), $contents);
+        return $flatFile->getStorage()->put(
+            $flatFile->getPathResolver()->getRelativePathname(),
+            $contents,
+        );
     }
 
     /**
      * @throws Throwable
      */
-    public static function delete(FlatFile $flatFile): bool
+    public static function deleted(FlatFile $flatFile): bool
     {
         if (method_exists($flatFile->getModel(), 'trashed')
+            && $flatFile->getModel()->{'trashed'}()
         ) {
-            dd(333, $flatFile->getModel());
-            return true;
+            return $flatFile->getModel()->save();
         }
 
-        dump($flatFile->getModel());
+        $relativePath = $flatFile->getPathResolver()->getRelativePath();
 
-        return $flatFile->getStorage()->delete($flatFile->getPathResolver()->getRelative());
+        if (count($flatFile->getStorage()->allFiles($relativePath)) === 1) {
+            $flatFile->getStorage()->deleteDirectory($relativePath);
+        }
+
+        return $flatFile->getStorage()->delete($flatFile->getPathResolver()->getRelativePathname());
     }
 
     private static function decode(Serializer|string $serializer, string $contents): array

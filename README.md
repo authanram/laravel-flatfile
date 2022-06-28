@@ -8,6 +8,8 @@ Eloquent flat file driver, on top of [Sushi 🍣](https://github.com/calebporzio
 
 PHP 8.1.4 or higher, [Laravel 9+](https://laravel.com/docs/9.x)
 
+_Downward compatibility is already at the doorstep._
+
 ## Installation
 
 You can install the package via composer.
@@ -23,6 +25,8 @@ Publish the [package configuration](config/config.php):
 ```shell
 php artisan vendor:publish --provider="Authanram\FlatFile\FlatFileServiceProvider"
 ```
+
+Quickly examining the configuration file `config/flatfile.php` would be a good idea.
 
 ## Basic Usage Example
 
@@ -69,46 +73,28 @@ Post::create([
 This will store the following contents to `storage_path('app/flatfile/post/1.json')`:
 
 ```json
-{\n
-    "id": 1,\n
-    "title": "New package arrived: laravel-flatfile",\n
-    "body": "Solving the issue of...",\n
-    "published_at": "2022-06-26T00:03:18.105800Z",\n
-    "created_at": "2022-06-26T23:03:18.105800Z",\n
-    "updated_at": "2022-06-26T23:03:18.105800Z",\n
-    "deleted_at": null\n
+{
+    "id": 1,
+    "title": "New package arrived: laravel-flatfile",
+    "body": "Solving the issue of...",
+    "published_at": "2022-06-26 11:29:27",
+    "created_at": "2022-06-26 10:29:27",
+    "updated_at": "2022-06-26 10:29:27",
+    "deleted_at": null
 }
 ```
 
-For now the package ships a second serializer, supporting yaml.
+The package ships a second serializer, supporting yaml, that would lead to the following file
+contents stored at `storage_path('app/flatfile/post/1.yaml')`:
 
-To utilize this serializer, change the configuration as follows:
-
-```php
-use Authanram\FlatFile\Serializers\YamlSerializer;
-
-'storage_adapter' => new FilesystemAdapter([
-    'driver' => 'local',
-    'root' => storage_path('app/flatfile'),
-    'throw' => true,
-], YamlSerializer::class),
-```
-
-As this example may indicate, at this point we provide an [on-demand disk](https://laravel.com/docs/9.x/filesystem#on-demand-disks)
-instance to the package, to access the underlying filesystem.
-
-To hook into [eloquent's model events](https://laravel.com/docs/9.x/eloquent#events), you can
-adapt the following to go along with your needs:
-
-```php
-'event_handlers' => [
-    'saved' => static function ($model) {
-        return EventHandlers::saved($model);
-    },
-    'deleted' => static function ($model) {
-        return EventHandlers::deleted($model);
-    },
-],
+```yaml
+id: 1
+title: New package arrived: laravel-flatfile
+body: Solving the issue of...
+published_at: 2022-06-26 11:29:27
+created_at: '2022-06-26 10:29:27'
+updated_at: '2022-06-26 10:29:27'
+deleted_at: null
 ```
 
 ## Contributing

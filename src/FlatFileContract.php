@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Authanram\FlatFile\Contracts;
+namespace Authanram\FlatFile;
 
-use Authanram\FlatFile\PathResolver;
 use Authanram\FlatFile\Serializers\Serializer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\FilesystemAdapter;

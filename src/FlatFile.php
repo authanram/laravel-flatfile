@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Authanram\FlatFile;
 
-use Authanram\FlatFile\Contracts\FlatFileContract;
 use Authanram\FlatFile\Serializers\Serializer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\FilesystemAdapter;

@@ -33,7 +33,7 @@ it('saves model', function () {
 
     expect($model->exists)->toBeTrue();
 
-    $path = __DIR__.'/../TestFiles/flatfile/json-serializer-model/4.json';
+    $path = (string)flatFile($model)->getPathResolver();
 
     /**
      * @noinspection PhpUnhandledExceptionInspection
@@ -53,7 +53,7 @@ it('deletes model', function () {
         'data' => ['some' => 'data'],
     ]);
 
-    $path = __DIR__.'/../TestFiles/flatfile/json-serializer-model/4.json';
+    $path = (string)flatFile($model)->getPathResolver();
 
     expect($model->getKey())
         ->toEqual(4)

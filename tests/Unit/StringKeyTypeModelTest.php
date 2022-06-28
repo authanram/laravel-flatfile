@@ -21,7 +21,7 @@ it('writes to storage', function () {
         'data' => ['some' => 'data'],
     ]);
 
-    $path = $model::flatFile()->getStorageAdapter()->locate($model);
+    $path = (string)flatFile($model)->getPathResolver();
 
     expect($model->exists)
         ->toBeTrue()
