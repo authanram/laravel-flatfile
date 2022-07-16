@@ -1,0 +1,18 @@
+-
+    id: 1
+    name: foobar
+    data: '{"some":"data"}'
+    updated_at: '2022-06-26 07:41:21'
+    created_at: '2022-06-26 07:41:21'
+-
+    id: 2
+    name: bar
+    data: '{"some-string":"other-data","some-boolean":false,"and-a-float":7.77}'
+    created_at: '2022-06-24 05:23:31'
+    updated_at: '2022-06-24 05:23:31'
+-
+    id: 3
+    name: qux
+    data: '{"some-string":"qux-data","some-boolean":true,"and-a-float":777.0}'
+    created_at: '2022-06-24 05:23:31'
+    updated_at: '2022-06-24 05:23:31'

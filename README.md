@@ -97,6 +97,12 @@ updated_at: '2022-06-26 10:29:27'
 deleted_at: null
 ```
 
+## Caveats
+
+- **`many-to-many` relationships are currently not supported**
+
+    In order to facilitate a `many-to-many` relationship, please fall back to a regular DBMS supported by [Eloquent](https://laravel.com/docs/9.x/eloquent) or feel free to create [pull request](https://github.com/authanram/laravel-flatfile/pulls).
+
 ## Contributing
 
 Please see the [contribution guide](https://github.com/authanram/laravel-flatfile/blob/master/.github/CONTRIBUTING.md)

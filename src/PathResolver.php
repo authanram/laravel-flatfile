@@ -4,29 +4,30 @@ declare(strict_types=1);
 
 namespace Authanram\FlatFile;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
-
 final class PathResolver
 {
-    public static function make(Model|string $model, string $path, string $extension): self
-    {
-        $isObject = is_object($model);
-
-        $classname = $isObject ? $model::class : $model;
-
-        $relative = Str::kebab(class_basename($classname));
-
-        $filename = $isObject ? $model->getKey().$extension : '';
-
-        return new self(realpath($path), $relative, $filename);
+    private function __construct(
+        private readonly string $absolute,
+        private readonly string $relative,
+        private readonly string $filename
+    ) {
     }
 
-    private function __construct(
-        private string $absolute,
-        private string $relative,
-        private string $filename
-    ) {}
+    public function __toString(): string
+    {
+        return $this->getAbsolutePathname();
+    }
+
+    public static function make(string $directory, string $basename, string $extension): self
+    {
+        $path = realpath(config('flatfile.disk.root'));
+
+        $relative = $directory;
+
+        $filename = $basename !== '' ? $basename.$extension : '';
+
+        return new self($path, $relative, $filename);
+    }
 
     public function getAbsolutePath(): string
     {
@@ -51,10 +52,5 @@ final class PathResolver
     public function getFilename(): string
     {
         return $this->filename;
-    }
-
-    public function __toString(): string
-    {
-        return $this->getAbsolutePathname();
     }
 }

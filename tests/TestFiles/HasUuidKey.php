@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 
 trait HasUuidKey
 {
+    /** @noinspection PhpUnused */
     public function initializeHasUuidKey(): void
     {
         $this->incrementing = false;

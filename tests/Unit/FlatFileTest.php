@@ -1,32 +1,44 @@
 <?php /** @noinspection PhpUnhandledExceptionInspection, StaticClosureCanBeUsedInspection */
 
-use Authanram\FlatFile\FlatFile;
-use Authanram\FlatFile\PathResolver;
-use Authanram\FlatFile\Tests\TestFiles\JsonSerializerModel;
-use Illuminate\Filesystem\FilesystemAdapter;
-use Illuminate\Support\Facades\Storage;
+use Authanram\FlatFile\FlatFileContract;
+use Authanram\FlatFile\Serializers\JsonSerializer;
+use Authanram\FlatFile\Tests\TestFiles\Models\JsonModel;
+use Illuminate\Support\Facades\File;
+use function Spatie\Snapshots\assertMatchesSnapshot;
 
 beforeEach(function () {
-    /** @noinspection PhpUnhandledExceptionInspection */
-    $this->flatFile = (new FlatFile())
-        ->setModel(JsonSerializerModel::class)
-        ->setSerializer(config('flatfile.serializer'))
-        ->setStorage(Storage::build(config('flatfile.disk')));
+    $this->absolutePathname = __DIR__.'/../TestFiles/flatfile/json_models/4.json';
+
+    $this->flatFile = resolve(FlatFileContract::class)
+        ->setSerializer(JsonSerializer::class);
 });
 
-it('gets the model', function () {
-    expect($this->flatFile->getModel())
-        ->toEqual(JsonSerializerModel::class);
+it('gets all models by classname', function () {
+    assertMatchesSnapshot($this->flatFile->all(new JsonModel));
 });
 
-it('gets the path resolver', function () {
-    expect($this->flatFile->getPathResolver())
-        ->toBeInstanceOf(PathResolver::class);
+it('writes by model instance', function () {
+    $model = (new JsonModel())->forceFill([
+        'id' => 4,
+        'name' => 'foobar',
+        'data' => ['some' => 'data'],
+        'created_at' => now()->toString(),
+        'updated_at' => now()->toString(),
+    ]);
+
+    $this->flatFile->save($model);
+
+    expect(File::exists($this->absolutePathname))
+        ->toBeTrue();
 });
 
-it('gets the storage', function () {
-    expect($this->flatFile->getStorage())
-        ->toBeInstanceOf(FilesystemAdapter::class)
-        ->and($this->flatFile->getStorage()->getConfig())
-        ->toEqual(config('flatfile.disk'));
+it('deletes by model instance', function () {
+    $model = JsonModel::find(4);
+
+    expect($model)
+        ->toBeInstanceOf(JsonModel::class)
+        ->and($this->flatFile->delete($model))
+        ->toBeTrue()
+        ->and(File::exists($this->absolutePathname))
+        ->toBeFalse();
 });
