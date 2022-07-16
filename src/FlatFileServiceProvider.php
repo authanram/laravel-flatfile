@@ -7,7 +7,7 @@ namespace Authanram\FlatFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 
-class FlatFileServiceProvider extends ServiceProvider
+final class FlatFileServiceProvider extends ServiceProvider
 {
     public function register(): void
     {

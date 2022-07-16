@@ -19,11 +19,11 @@ interface FlatFileContract
     public function setStorage(FilesystemAdapter $storage): self;
 
     /**
-     * @param Model $model
-     *
      * @return array<int, string>
      *
      * @throws Throwable
+     *
+     * @noinspection PhpDocSignatureIsNotCompleteInspection
      */
     public function all(Model $model): array;
 

@@ -22,8 +22,8 @@ trait FlatFileModel
      */
     public static function bootFlatFileModel(): void
     {
-        static::saved(static fn(Model $model) => self::flatFile()->save($model));
-        static::deleted(static fn(Model $model) => self::flatFile()->delete($model));
+        static::saved(static fn (Model $model) => self::flatFile()->save($model));
+        static::deleted(static fn (Model $model) => self::flatFile()->delete($model));
     }
 
     /**
