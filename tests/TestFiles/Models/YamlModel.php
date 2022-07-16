@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Authanram\FlatFile\Tests\TestFiles;
+namespace Authanram\FlatFile\Tests\TestFiles\Models;
 
 use Authanram\FlatFile\FlatFileModel;
 use Authanram\FlatFile\Serializers\YamlSerializer;
 use Eloquent;
 
-class YamlSerializerModel extends Eloquent
+class YamlModel extends Eloquent
 {
     use FlatFileModel;
 

@@ -7,20 +7,33 @@ namespace Authanram\FlatFile;
 use Authanram\FlatFile\Serializers\Serializer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Throwable;
 
 interface FlatFileContract
 {
-    public function getStorage(): FilesystemAdapter;
+    /**
+     * @throws Throwable
+     */
+    public function setSerializer(Serializer|string $serializer): self;
 
     public function setStorage(FilesystemAdapter $storage): self;
 
-    public function getSerializer(): Serializer|string;
+    /**
+     * @param Model $model
+     *
+     * @return array<int, string>
+     *
+     * @throws Throwable
+     */
+    public function all(Model $model): array;
 
-    public function setSerializer(Serializer|string $serializer): self;
+    /**
+     * @throws Throwable
+     */
+    public function save(Model $model): bool;
 
-    public function getModel(): Model|string;
-
-    public function setModel(Model|string $model): self;
-
-    public function getPathResolver(): PathResolver;
+    /**
+     * @throws Throwable
+     */
+    public function delete(Model $model): bool;
 }

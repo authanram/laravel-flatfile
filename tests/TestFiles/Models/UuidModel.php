@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Authanram\FlatFile\Tests\TestFiles;
+namespace Authanram\FlatFile\Tests\TestFiles\Models;
 
-class StringKeyTypeModel extends JsonSerializerModel
+use Authanram\FlatFile\Tests\TestFiles\HasUuidKey;
+
+class UuidModel extends JsonModel
 {
     use HasUuidKey;
 

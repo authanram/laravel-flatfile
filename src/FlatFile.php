@@ -5,46 +5,30 @@ declare(strict_types=1);
 namespace Authanram\FlatFile;
 
 use Authanram\FlatFile\Serializers\Serializer;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\FilesystemAdapter;
 use InvalidArgumentException;
-use Throwable;
 
 final class FlatFile implements FlatFileContract
 {
-    private FilesystemAdapter $storage;
-
     private Serializer|string $serializer;
 
-    private Model|string $model;
+    private FilesystemAdapter|Filesystem $storage;
 
-    /**
-     * @throws Throwable
-     */
-    public function getStorage(): FilesystemAdapter
-    {
-        return $this->storage;
-    }
-
-    public function setStorage(FilesystemAdapter $storage): self
+    public function setStorage(FilesystemAdapter|Filesystem $storage): self
     {
         $this->storage = $storage;
 
         return $this;
     }
 
-    public function getSerializer(): Serializer|string
-    {
-        return $this->serializer;
-    }
-
     public function setSerializer(Serializer|string $serializer): self
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
         throw_if(
             is_subclass_of($serializer, Serializer::class) === false,
             InvalidArgumentException::class,
-            sprintf('Expected "%s" got: %s', Serializer::class, gettype($serializer)),
+            sprintf('[%s] must be a subclass of %s', $serializer, Serializer::class),
         );
 
         $this->serializer = $serializer;
@@ -52,27 +36,47 @@ final class FlatFile implements FlatFileContract
         return $this;
     }
 
-    public function getModel(): Model|string
-    {
-        return $this->model;
-    }
-
-    public function setModel(Model|string $model): self
-    {
-        $this->model = $model;
-
-        return $this;
-    }
-
     /**
-     * @throws Throwable
+     * @inheritDoc
      */
-    public function getPathResolver(): PathResolver
+    public function all(Model $model): array
+    {
+        $files = $this->storage->files($this->getPathResolver($model)->getRelativePath());
+
+        return collect($files)
+            ->map(fn ($path) => $this->serializer::decode($this->storage->get($path)))
+            ->toArray();
+    }
+
+    public function save(Model $model): bool
+    {
+        return $this->storage->put(
+            $this->getPathResolver($model)->getRelativePathname(),
+            $this->serializer::encode($model->getAttributes()),
+        );
+    }
+
+    public function delete(Model $model): bool
+    {
+        if (method_exists($model, 'trashed') && $model->{'trashed'}()) {
+            return $model->save();
+        }
+
+        $pathResolver = $this->getPathResolver($model);
+
+        if (count($this->storage->allFiles($pathResolver->getRelativePath())) === 1) {
+            return $this->storage->deleteDirectory($pathResolver->getRelativePath());
+        }
+
+        return $this->storage->delete($pathResolver->getRelativePathname());
+    }
+
+    private function getPathResolver(Model $model): PathResolver
     {
         return PathResolver::make(
-            $this->model,
-            $this->getStorage()->path('.'),
-            $this->getSerializer()::extension(),
+            $model->getTable(),
+            (string) ($model->getKey() ?? ''),
+            $this->serializer::extension(),
         );
     }
 }

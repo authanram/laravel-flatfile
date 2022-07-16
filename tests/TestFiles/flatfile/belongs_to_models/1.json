@@ -1,0 +1,8 @@
+{
+    "id": 1,
+    "has_many_model_id": 1,
+    "has_one_model_id": 1,
+    "name": "foobar",
+    "updated_at": "2022-06-26 07:41:21",
+    "created_at": "2022-06-26 07:41:21"
+}

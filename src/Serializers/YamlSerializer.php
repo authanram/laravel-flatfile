@@ -13,11 +13,17 @@ final class YamlSerializer extends Serializer
         return '.yaml';
     }
 
+    /**
+     * @inheritDoc
+     */
     public static function decode(string $contents): array
     {
         return Yaml::parse($contents);
     }
 
+    /**
+     * @inheritDoc
+     */
     public static function encode(array $attributes): string
     {
         return Yaml::dump($attributes);

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Authanram\FlatFile\Tests\TestFiles;
+namespace Authanram\FlatFile\Tests\TestFiles\Models;
 
 use Authanram\FlatFile\FlatFileModel;
 use Eloquent;
 
-class JsonSerializerModel extends Eloquent
+class JsonModel extends Eloquent
 {
     use FlatFileModel;
 

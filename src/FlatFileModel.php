@@ -17,19 +17,23 @@ trait FlatFileModel
 
     /**
      * @throws Throwable
+     *
+     * @noinspection PhpUnused
      */
     public static function bootFlatFileModel(): void
     {
-        static::saved(static fn (Model $model) => Handlers::save(self::flatFile($model)));
-        static::deleted(static fn (Model $model) => Handlers::delete(self::flatFile($model)));
+        static::saved(static fn(Model $model) => self::flatFile()->save($model));
+        static::deleted(static fn(Model $model) => self::flatFile()->delete($model));
     }
 
     /**
+     * @return array<int, array<mixed>>
+     *
      * @throws Throwable
      */
     public function getRows(): array
     {
-        return Handlers::all(self::flatFile(static::class));
+        return self::flatFile()->all($this);
     }
 
     public function usesTimestamps(): bool
@@ -40,10 +44,9 @@ trait FlatFileModel
     /**
      * @throws Throwable
      */
-    private static function flatFile(Model|string $model): FlatFileContract
+    private static function flatFile(): FlatFileContract
     {
         return resolve(FlatFileContract::class)
-            ->setSerializer(static::$flatFileSerializer ?? config('flatfile.serializer'))
-            ->setModel($model);
+            ->setSerializer(static::$flatFileSerializer ?? config('flatfile.serializer'));
     }
 }
